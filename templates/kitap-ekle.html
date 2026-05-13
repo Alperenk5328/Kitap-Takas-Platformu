@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Kitap Ekle - Kitap Takas Platformu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>📚 Kitap Takas</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+                    <li><a href="/#kesfet" class="nav-link">Keşfet</a></li>
+                    <li><a href="/kitap-ekle" class="nav-link active">Kitap Ekle</a></li>
+                    <li><a href="/#kutuphane" class="nav-link">Kütüphanem</a></li>
+                    <li><a href="/#takaslar" class="nav-link">Takaslarım</a></li>
+                    <li id="auth-buttons">
+                        <button class="btn btn-outline" onclick="showLoginModal()">Giriş</button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">Kayıt</button>
+                    </li>
+                    <li id="user-menu" style="display: none;">
+                        <span id="username-display"></span>
+                        <button class="btn btn-outline" onclick="logout()">Çıkış</button>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2>📚 Kitap Ekle</h2>
+                <form id="add-book-form" class="form">
+                    <div class="form-group">
+                        <label for="book-title">Kitap Adı*</label>
+                        <input type="text" id="book-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-author">Yazar*</label>
+                        <input type="text" id="book-author" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-publisher">Yayınevi</label>
+                        <input type="text" id="book-publisher" name="publisher">
+                    </div>
+                    <div class="form-group">
+                        <label for="book-genre">Tür</label>
+                        <select id="book-genre" name="genre">
+                            <option value="">Seçiniz</option>
+                            <option value="roman">Roman</option>
+                            <option value="hikaye">Hikaye</option>
+                            <option value="bilim">Bilim</option>
+                            <option value="tarih">Tarih</option>
+                            <option value="felsefe">Felsefe</option>
+                            <option value="siyaset">Siyaset</option>
+                            <option value="ekonomi">Ekonomi</option>
+                            <option value="psikoloji">Psikoloji</option>
+                            <option value="cocuk">Çocuk</option>
+                            <option value="genclik">Gençlik</option>
+                            <option value="biyografi">Biyografi</option>
+                            <option value="sanat">Sanat</option>
+                            <option value="spor">Spor</option>
+                            <option value="diger">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-condition">Durum*</label>
+                        <select id="book-condition" name="condition" required>
+                            <option value="">Seçiniz</option>
+                            <option value="yeni">Yeni</option>
+                            <option value="cok-iyi">Çok İyi</option>
+                            <option value="iyi">İyi</option>
+                            <option value="yipranmis">Yıpranmış</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-photo-url">Kitap Fotoğrafı URL</label>
+                        <input type="url" id="book-photo-url" name="photo_url" placeholder="https://example.com/kitap-fotografi.jpg">
+                        <small>İsteğe bağlı: Kitabın fotoğrafını yükleyebilirsiniz</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-description">Açıklama</label>
+                        <textarea id="book-description" name="description" rows="4" placeholder="Kitap hakkında bilgi verin..."></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Kitabı Ekle</button>
+                        <button type="button" class="btn btn-outline" onclick="window.location.href='/'">İptal</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            <h2>Giriş Yap</h2>
+            <form id="login-form" class="form">
+                <div class="form-group">
+                    <label for="login-username">Kullanıcı Adı</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Şifre</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Giriş Yap</button>
+            </form>
+            <p>Hesabınız yok mu? <a href="#" onclick="switchModal()">Kayıt olun</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            <h2>Kayıt Ol</h2>
+            <form id="register-form" class="form">
+                <div class="form-group">
+                    <label for="register-username">Kullanıcı Adı</label>
+                    <input type="text" id="register-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">E-posta</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Şifre</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+            </form>
+            <p>Zaten hesabınız var mı? <a href="#" onclick="switchModal()">Giriş yapın</a></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Kitap Takas Platformu. Tüm hakları saklıdır.</p>
+            <p>📚 Paylaşım ekonomisi ile sürdürülebilir okuma</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
